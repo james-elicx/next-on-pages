@@ -16,7 +16,7 @@ describe('routesMatcher', () => {
 		const request = (...args: Parameters<typeof requestGenerator>) =>
 			routesMatcher({ request: requestGenerator(...args) });
 
-		expect(request('/').length).toBe(0);
+		expect(request('/')?.length).toBe(0);
 	});
 
 	test('src', () => {

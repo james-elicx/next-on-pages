@@ -1,13 +1,32 @@
 {
 	"include": ["src", "templates", "tests", "vercel.types.d.ts"],
 	"compilerOptions": {
-		"checkJs": false,
+		// "checkJs": false,
 		"target": "ES2021",
 		"module": "CommonJS",
 		"resolveJsonModule": true,
 		"lib": ["ES2021"],
 		"types": ["@cloudflare/workers-types"],
+
+		"strict": true,
+		"allowUnusedLabels": false,
+		"allowUnreachableCode": false,
+		// "exactOptionalPropertyTypes": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noUncheckedIndexedAccess": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+
+		// "verbatimModuleSyntax": true,
+		"checkJs": true,
+
+		"esModuleInterop": true,
 		"skipLibCheck": true,
-		"esModuleInterop": true
+		"forceConsistentCasingInFileNames": true,
+
+		"exactOptionalPropertyTypes": false
 	}
 }

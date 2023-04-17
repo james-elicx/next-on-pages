@@ -4,8 +4,8 @@ import { adjustRequestForVercel, hasField } from './utils';
 // NOTE: Will be replaced in the new routing system. (see issue #129)
 export const routesMatcher = (
 	{ request }: { request: Request },
-	routes?: VercelConfig['routes']
-): VercelConfig['routes'] => {
+	routes?: NonNullable<VercelConfig['routes']>
+): NonNullable<VercelConfig['routes']> => {
 	// https://vercel.com/docs/build-output-api/v3#build-output-configuration/supported-properties/routes
 	const url = new URL(request.url);
 	const cookies = parse(request.headers.get('cookie') || '');
@@ -19,7 +19,7 @@ export const routesMatcher = (
 		if ('methods' in route) {
 			const requestMethod = request.method.toLowerCase();
 
-			const foundMatch = route.methods.find(
+			const foundMatch = route.methods?.find(
 				method => method.toLowerCase() === requestMethod
 			);
 
@@ -29,8 +29,8 @@ export const routesMatcher = (
 		}
 
 		if ('has' in route) {
-			const okay = route.has.every(has =>
-				hasField({ request, url, cookies }, has)
+			const okay = route.has?.every(has =>
+				hasField(has, { url, cookies, headers: request.headers })
 			);
 
 			if (!okay) {
@@ -39,8 +39,8 @@ export const routesMatcher = (
 		}
 
 		if ('missing' in route) {
-			const notOkay = route.missing.find(has =>
-				hasField({ request, url, cookies }, has)
+			const notOkay = route.missing?.find(has =>
+				hasField(has, { url, cookies, headers: request.headers })
 			);
 
 			if (notOkay) {
@@ -54,7 +54,10 @@ export const routesMatcher = (
 		}
 
 		if ('src' in route) {
-			const regExp = new RegExp(route.src, caseSensitive ? undefined : 'i');
+			const regExp = new RegExp(
+				route.src as string,
+				caseSensitive ? undefined : 'i'
+			);
 			const match = url.pathname.match(regExp);
 
 			if (match) {
@@ -91,11 +94,11 @@ export default {
 		for (const route of routes) {
 			if (
 				'middlewarePath' in route &&
-				route.middlewarePath in __BUILD_OUTPUT__
+				(route.middlewarePath as string) in __BUILD_OUTPUT__
 			) {
-				const item = __BUILD_OUTPUT__[route.middlewarePath];
+				const item = __BUILD_OUTPUT__[route.middlewarePath as string];
 
-				if (item.type === 'middleware') {
+				if (item?.type === 'middleware') {
 					return await (await item.entrypoint).default(request, context);
 				}
 			}

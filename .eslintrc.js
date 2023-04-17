@@ -18,5 +18,7 @@ module.exports = {
 		'@typescript-eslint/no-unused-vars': 'error',
 		'prefer-const': 'error',
 		'no-mixed-spaces-and-tabs': 'off', // off because it conflicts with prettier
+
+		'@typescript-eslint/consistent-type-imports': 'error',
 	},
 };
